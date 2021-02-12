@@ -64,7 +64,8 @@ namespace Multisync.App
 
                 config = new Settings();
                 config.SyncFolder = folderToStore;
-                config.RootFolderID = drive.FindID(driveRoot);
+                var root = drive.FindItemFromPath(driveRoot, false);
+                config.RootFolderID = root.ItemIdentifier;
                 config.SaveTo();
             }
             else

@@ -114,12 +114,13 @@ namespace Multisync.GoogleDriveInterface
             return parent;
         }
 
-        public ItemInterface FindItemFromPath(string fullPath)
+        public ItemInterface FindItemFromPath(string fullPath, bool rootFirst = true)
         {
             fullPath = PathNormalizer.Normalize(fullPath);
             string[] items = PathNormalizer.Normalize(fullPath).Split("/");
             //Page page = this.RunQueryAsPage($"name = '{items[0]}'");
-            ItemInterface current = this.GetFileById("root");
+            ItemInterface current = 
+            rootFirst ? this.GetFileById("root") : this.GetFileById(this.FindID(items[0]).ID);
 
             for (int i = 1; i < items.Length; i++)
             {
@@ -143,7 +144,7 @@ namespace Multisync.GoogleDriveInterface
             return current;
         }
 
-        public ItemInterface CreateNewFile(string absoluteFile, string localPath, string mimeType = "application/unknown")
+        public ItemInterface CreateNewFile(string localPath, string mimeType = "application/unknown")
         {
             var dinfo = Directory.GetParent(localPath);
             var parentPath = 
@@ -154,9 +155,9 @@ namespace Multisync.GoogleDriveInterface
 
             var parent = this.FindItemFromPath(parentPath);
 
-            if (parent == null && localPath.Split('/').Length > 2)
+            if (parent == null && PathNormalizer.Normalize(localPath).Split('/').Length > 2)
             {// Not root
-                parent = CreateNewFile(Directory.GetParent(absoluteFile).FullName, parentPath, "application/vnd.google-apps.folder");
+                parent = CreateNewFile(parentPath, "application/vnd.google-apps.folder");
             }
 
             var itemName = Path.GetFileName(localPath);

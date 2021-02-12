@@ -77,7 +77,7 @@ namespace Multisync.App
                 PathNormalizer.Normalize(absolutePath).Replace(
                 PathNormalizer.Normalize(localPath), String.Empty);
 
-            var item = drive.CreateNewFile(absolutePath, drivePath);
+            var item = drive.CreateNewFile(drivePath);
             //ModLog.SetFileLastWriteTime(absolutePath, new DateTime(DateTime.Now.Ticks + 10000));
             this.SyncWithState(item, SynchronizingItem.SyncState.Uploading);
 

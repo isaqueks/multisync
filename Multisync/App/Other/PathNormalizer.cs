@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Multisync.App.Util
 {
@@ -10,7 +11,7 @@ namespace Multisync.App.Util
         {
             path = path.Trim().Replace("\\", "/");
 
-            while (path.StartsWith("/"))
+            while (path.StartsWith("/") && !path.StartsWith("/home"))
                 path = path.Substring(1);
 
             while (path.EndsWith("/"))
